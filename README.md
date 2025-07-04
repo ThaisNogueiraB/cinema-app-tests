@@ -1,3 +1,6 @@
+
+
+
 # 🎬 Cinema App - Suíte Completa de Testes
 
 > **Projeto de Testes Automatizados e Manuais para a Aplicação Cinema App**  
@@ -401,6 +404,10 @@ ls -la results/
 
 
 
+![](https://user-images.githubusercontent.com/74038190/236544207-c4f427b3-be04-4cfe-a3d2-2eabb0d2de73.gif)
 
-**Desenvolvido com ❤️ pela QA [Thais Nogueira](https://github.com/ThaisNogueiraB)**  
+**Desenvolvido com ❤️ pela QA [Thais Nogueira](https://github.com/ThaisNogueiraB)** 
+
+**contato**:[Linkedin](https://www.linkedin.com/in/thaisnogueirab/) 
+
 *Última atualização: Julho 2025*
