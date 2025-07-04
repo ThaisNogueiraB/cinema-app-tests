@@ -2,6 +2,8 @@
 
 > **Projeto de Testes Automatizados e Manuais para a Aplicação Cinema App**  
 > Desenvolvido com Robot Framework, Playwright e Postman para garantir qualidade e confiabilidade da aplicação.
+> Repositorio da aplicaçao https://github.com/juniorschmitz/cinema-challenge-back / https://github.com/juniorschmitz/cinema-challenge-front
+
 
 ## 📋 Índice
 
