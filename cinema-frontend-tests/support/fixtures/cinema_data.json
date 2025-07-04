@@ -1,0 +1,54 @@
+{
+  "admin": {
+    "nome": "Administrador",
+    "email": "admin@example.com",
+    "senha": "admin123",
+    "tipo": "admin"
+  },
+  "admin-login": {
+    "email": "admin@example.com",
+    "password": "admin123"
+  },
+  "usuario": {
+    "nome": "Usuário Teste",
+    "email": "test@example.com",
+    "senha": "password123",
+    "tipo": "user"
+  },
+  "usuario-login": {
+    "email": "teste@teste.com",
+    "password": "password123"
+  },
+  "filme": {
+    "title": "Filme Teste",
+    "synopsis": "Sinopse do filme teste para automação",
+    "director": "Diretor Teste",
+    "genres": ["Ação", "Aventura"],
+    "duration": 120,
+    "classification": "Livre",
+    "poster": "filme-teste.jpg",
+    "releaseDate": "2024-12-25"
+  },
+  "filme-teste": {
+    "title": "Filme Teste Automatizado",
+    "synopsis": "Sinopse do filme teste para automação",
+    "director": "Diretor Teste",
+    "genres": ["Ação", "Aventura"],
+    "duration": 120,
+    "classification": "Livre",
+    "poster": "filme-teste.jpg",
+    "releaseDate": "2024-12-25"
+  },
+  "sessao": {
+    "filmeId": "filme_id_placeholder",
+    "sala": "Sala 1",
+    "horario": "2024-12-25T20:00:00Z",
+    "preco": 25.50,
+    "capacidade": 100
+  },
+  "reserva": {
+    "sessaoId": "sessao_id_placeholder",
+    "quantidade": 2,
+    "tipoIngresso": "Inteira"
+  }
+} 
