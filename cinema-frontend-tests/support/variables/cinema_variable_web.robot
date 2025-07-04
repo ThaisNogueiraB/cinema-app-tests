@@ -23,7 +23,7 @@ ${SENHA_USER}     password123
 ${EMAIL_CADASTRO}    usuario.teste@email.com
 
 # Caminhos dos arquivos
-${FIXTURES_PATH}  ${EXECDIR}/cinema-app-tests/cinema-frontend-test/support/fixtures/cinema_data.json
+${FIXTURES_PATH}  ${EXECDIR}/cinema-frontend-tests/support/fixtures/cinema_data.json
 
 # Elementos da interface web
 ${LOGIN_EMAIL_FIELD}    id=email
