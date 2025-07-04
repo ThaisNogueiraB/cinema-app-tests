@@ -1,0 +1,52 @@
+{
+  "executions": [
+    {
+      "item": {
+        "name": "Login API"
+      },
+      "assertions": [
+        {
+          "passed": true,
+          "name": "Status code is 200"
+        }
+      ]
+    },
+    {
+      "item": {
+        "name": "Criar Filme"
+      },
+      "assertions": [
+        {
+          "passed": false,
+          "name": "Status code is 201",
+          "error": {
+            "message": "Expected 201 but got 400"
+          }
+        }
+      ]
+    },
+    {
+      "item": {
+        "name": "Listar Cinemas"
+      },
+      "assertions": [
+        {
+          "passed": true,
+          "name": "Status code is 200"
+        },
+        {
+          "passed": true,
+          "name": "Response has cinemas array"
+        }
+      ]
+    },
+    {
+      "item": {
+        "name": "Reservar Ingresso"
+      },
+      "requestError": {
+        "message": "Connection timeout"
+      }
+    }
+  ]
+} 
