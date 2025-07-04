@@ -65,42 +65,12 @@ npm run dev
 robot tests/
 ```
 
-### Executar testes específicos por tag
-```bash
-# Testes de login
-robot --include "login" tests/
-
-# Testes de filmes
-robot --include "filmes" tests/
-
-# Testes de reservas
-robot --include "reserva" tests/
-
-# Testes de sessões
-robot --include "sessao" tests/
-
-# Testes de administrador
-robot --include "admin" tests/
-```
-
-### Executar teste específico
-```bash
-# Por nome do arquivo
-robot tests/login_tests.robot
-
-# Por tag específica
-robot --include "criar-reserva" tests/reserva_tests.robot
-
-# Por nome do teste
-robot --test "CTW-020: Listagem de reservas do usuário via interface" tests/reserva_tests.robot
-```
-
 
 
 ## 📁 Estrutura do Projeto
 
 ```
-src/
+cinema-frontend-tests/
 ├── 📁 tests/                    # Testes organizados por funcionalidade
 │   ├── login_tests.robot        # Testes de autenticação
 │   ├── filmes_tests.robot       # Testes de filmes
@@ -138,10 +108,7 @@ src/
 - **Web Server**: http://localhost:3002
 - **API Server**: http://localhost:3000/api/v1
 
-### Configurações do Navegador
-- **Browser**: Chromium
-- **Headless**: False (para visualizar os testes)
-- **Timeout**: 30s
+
 
 ### Variáveis de Ambiente
 As principais variáveis estão definidas em `support/variables/cinema_variable_web.robot`:
@@ -181,79 +148,13 @@ Após a execução dos testes, os relatórios são gerados automaticamente:
 - **CTW-026**: Visualizar detalhes de sessão
 - **CTW-055**: Resetar assentos (admin)
 
-## 🐛 Solução de Problemas
-
-### Erro de Conexão
-Se os testes falharem com erro de conexão:
-1. Verifique se os servidores estão rodando
-2. Execute `start_servers.bat` para reiniciar
-3. Aguarde os servidores inicializarem completamente
-
-### Erro de SESSAO_ID
-Se houver erro relacionado ao SESSAO_ID:
-1. Verifique se a API está respondendo
-2. Verifique se o usuário admin foi criado corretamente
-3. Verifique se o filme e sessão foram criados
-
-### Erro de Timeout
-Se houver erro de timeout:
-1. Aumente o valor de `${TIMEOUT}` nas variáveis
-2. Verifique a velocidade da conexão
-3. Considere executar em modo headless
 
 ### Screenshots
 Screenshots são capturados automaticamente em caso de falha na pasta `browser/screenshot/`.
 
-## 📝 Tags dos Testes
 
-- `login`: Testes de autenticação
-- `filmes`: Testes de filmes
-- `reserva`: Testes de reservas
-- `sessao`: Testes de sessões
-- `admin`: Testes que requerem privilégios de administrador
-- `lista-sessao`: Listagem de sessões
-- `detalhes-sessao`: Detalhes de sessão
-- `criar-reserva`: Criação de reservas
-- `listagem-reservas`: Listagem de reservas
 
-## 🔄 Comandos Úteis
 
-### Limpar relatórios antigos
-```bash
-# Windows
-del /q *.html *.xml
-rmdir /s /q browser\screenshot browser\traces
-
-# Linux/Mac
-rm -f *.html *.xml
-rm -rf browser/screenshot browser/traces
-```
-
-### Executar testes em modo headless
-```bash
-robot --variable HEADLESS:True tests/
-```
-
-### Executar testes com output detalhado
-```bash
-robot --console verbose tests/
-```
-
-### Executar testes específicos com retry
-```bash
-robot --rerunfailed output.xml tests/
-```
-
-## 🤝 Contribuição
-
-1. **Mantenha a estrutura de pastas** conforme definido
-2. **Use tags apropriadas** nos testes
-3. **Documente novas keywords** com `[Documentation]`
-4. **Execute os testes** antes de fazer commit
-5. **Siga o padrão de nomenclatura** dos testes (CTW-XXX)
-6. **Adicione screenshots** em caso de falha
-
-## 📞 Suporte
 
 Para dúvidas ou problemas:
 1. Verifique a seção "Solução de Problemas"
@@ -263,4 +164,4 @@ Para dúvidas ou problemas:
 
 ---
 
-**Desenvolvido com ❤️ usando Robot Framework + Playwright** 
+**Desenvolvido com ❤️ usando Robot Framework
