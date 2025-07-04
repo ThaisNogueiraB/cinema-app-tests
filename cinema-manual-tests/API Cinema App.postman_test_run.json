@@ -1,0 +1,660 @@
+{
+	"id": "d477e736-60a6-4058-afa8-911c8ec46eb0",
+	"name": "API Cinema App",
+	"timestamp": "2025-07-01T21:22:16.894Z",
+	"collection_id": "44511792-b2a566b0-68b2-4b9e-a2c0-765a0a2045fc",
+	"folder_id": "44511792-6b734e6f-ac56-4bef-9135-135ea9b1d34c",
+	"environment_id": "44511792-5c922648-e54c-46f1-a73b-a42d541cc917",
+	"totalPass": 0,
+	"delay": 0,
+	"persist": true,
+	"status": "finished",
+	"startedAt": "2025-07-01T21:22:11.863Z",
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "96314340-41ee-4df9-90fa-cbfd0562b2bc",
+			"name": "CT-001 -Cadastro user com dados validos Copy",
+			"url": "/auth/register",
+			"time": 127,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				127
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "413b1eb8-93b9-4387-aa63-5211c4917861",
+			"name": "Criar administrador Copy",
+			"url": "/setup/admin",
+			"time": 198,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				198
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "391a1511-d10c-4edd-89d8-c8be3b0e97e4",
+			"name": "Login com dados admin Copy",
+			"url": "/auth/login",
+			"time": 128,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				128
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "22015809-2e34-40f5-9b03-7fbd2c34d150",
+			"name": "CT-007-Login com dados validos Copy",
+			"url": "http://localhost:3000/api/v1/auth/login",
+			"time": 106,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				106
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "d3725d98-e69a-4e4b-8a3c-e6e372aa2c4a",
+			"name": "CT-019 - Obter todos os filmes Copy",
+			"url": "http://localhost:3000/api/v1/movies",
+			"time": 33,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				33
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "181b3a18-d22e-4b7d-b014-54296cd74d60",
+			"name": "CT-020- Criar filmes com dados validos Copy",
+			"url": "http://localhost:3000/api/v1/movies",
+			"time": 40,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				40
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "baa39fd6-17df-4862-82ad-47304b4456c1",
+			"name": "CT-025 - Obter filme por id Copy",
+			"url": "http://localhost:3000/api/v1/movies/68645185949db48d198bde50",
+			"time": 33,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				33
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "0b0a06cf-739c-42c4-9752-b2486cee2e22",
+			"name": "CT -026 -Alterar nome filme com dados validos Copy",
+			"url": "http://localhost:3000/api/v1/movies/68645185949db48d198bde50",
+			"time": 54,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				54
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "6a5f3b9e-628d-42aa-97f1-ba7f2f95b7ff",
+			"name": "CT-059 - Gerar todas as salas Copy",
+			"url": "http://localhost:3000/api/v1/theaters",
+			"time": 18,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				18
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "2b707748-e802-4cd5-a42d-46b5075e49e6",
+			"name": "CT-060 - Criar um teatro valido Copy",
+			"url": "http://localhost:3000/api/v1/theaters",
+			"time": 39,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				39
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "953ce402-e45b-497c-b59b-6c41b1e55555",
+			"name": "CT-064- Gerar sala por ID Copy",
+			"url": "http://localhost:3000/api/v1/theaters/68645185949db48d198bde59",
+			"time": 32,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				32
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "3db58f95-e82c-4810-998e-25c7a2fb4ff3",
+			"name": "CT-065- Atualizar sala Copy",
+			"url": "http://localhost:3000/api/v1/theaters/68645185949db48d198bde59",
+			"time": 55,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				55
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "fcc52f6f-c937-4525-ac0d-71150293b528",
+			"name": "CT-044- Obter todas as sessoes Copy",
+			"url": "http://localhost:3000/api/v1/sessions",
+			"time": 98,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				98
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "39d2d5ba-3c74-4875-809e-217627cec1cc",
+			"name": "CT-045- Criar uma nova sessao valida Copy",
+			"url": "http://localhost:3000/api/v1/sessions",
+			"time": 86,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				86
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "011f941e-9847-4a61-be85-1cad5a3defd0",
+			"name": "CT-049- Obter sessao por id Copy",
+			"url": "http://localhost:3000/api/v1/sessions/68645186949db48d198bde67",
+			"time": 37,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				37
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "ec0d1e1f-d665-436a-9cf1-b4ba1bf616c8",
+			"name": "CT-051Atualizar horario sessao Copy",
+			"url": "http://localhost:3000/api/v1/sessions/68645186949db48d198bde67",
+			"time": 144,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				144
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "33320a75-325f-454f-8d09-55cae4604907",
+			"name": "CT-031 - Obter todas as reservas  do usuario  atual com sucesso Copy",
+			"url": "http://localhost:3000/api/v1/reservations",
+			"time": 209,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				209
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "8d3420a7-364f-4a75-a9e2-1a3b554bdc6f",
+			"name": "CT-033- Criar uma nova reserva assento disponivel Copy",
+			"url": "http://localhost:3000/api/v1/reservations",
+			"time": 219,
+			"responseCode": {
+				"code": 201,
+				"name": "Created"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				219
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "37262ded-232f-4337-98aa-e5489aa0bd14",
+			"name": "CT-037 Obter  reservas  por id Copy",
+			"url": "http://localhost:3000/api/v1/reservations/68645187949db48d198bde78",
+			"time": 62,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				62
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "d72c7476-c725-4205-b4c0-e90f9c1f9238",
+			"name": "CT-038 - Atualizar status de reserva Copy",
+			"url": "http://localhost:3000/api/v1/reservations/68645187949db48d198bde78",
+			"time": 97,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				97
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "3eefb095-afb6-43bd-b40b-dcc59f4b0522",
+			"name": "CT-070- Obter todos os usuarios Copy",
+			"url": "http://localhost:3000/api/v1/users",
+			"time": 35,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				35
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "3fe16683-8fec-40c3-8d36-a8c87b995691",
+			"name": "CT-071 - obter usuario por ID Copy",
+			"url": "http://localhost:3000/api/v1/users/68645184949db48d198bde46",
+			"time": 34,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				34
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "82a3efb6-b1b3-4cbb-b545-5633aed82383",
+			"name": "CT-072 - Atualizar usuarios Copy",
+			"url": "http://localhost:3000/api/v1/users/68645184949db48d198bde46",
+			"time": 53,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				53
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "73e07181-eec3-4d94-830a-4947c897cd97",
+			"name": "CT-056 - Ressetar assentos Copy",
+			"url": "http://localhost:3000/api/v1/sessions/68645186949db48d198bde67/reset-seats",
+			"time": 113,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				113
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "3dce227c-814f-4f45-bfcf-dc1fe762bce5",
+			"name": "CT-042 - Deletar reserva Copy",
+			"url": "http://localhost:3000/api/v1/reservations/68645187949db48d198bde78",
+			"time": 93,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				93
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "0a7fcd13-545c-4dd3-bf0b-442fea269ed7",
+			"name": "CT-052 - Deletar sessao Copy",
+			"url": "http://localhost:3000/api/v1/sessions/68645186949db48d198bde67",
+			"time": 58,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				58
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "a1feee7a-abfb-46f1-a43a-5ffe3b60023a",
+			"name": "CT-028 - Deletar filme existente Copy",
+			"url": "http://localhost:3000/api/v1/movies/68645185949db48d198bde50",
+			"time": 53,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				53
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "ecde6a55-0a93-40ae-a3f0-03a3aba08a43",
+			"name": "CT-067 -Remover sala Copy",
+			"url": "http://localhost:3000/api/v1/theaters/68645185949db48d198bde59",
+			"time": 53,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				53
+			],
+			"allTests": [
+				{}
+			]
+		},
+		{
+			"id": "71227664-142c-4c27-a60d-c5aa4668563f",
+			"name": "CT-074 -Deletar usuario Copy",
+			"url": "http://localhost:3000/api/v1/users/68645184949db48d198bde46",
+			"time": 54,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {},
+			"testPassFailCounts": {},
+			"times": [
+				54
+			],
+			"allTests": [
+				{}
+			]
+		}
+	],
+	"count": 1,
+	"totalTime": 2361,
+	"collection": {
+		"requests": [
+			{
+				"id": "96314340-41ee-4df9-90fa-cbfd0562b2bc",
+				"method": "POST"
+			},
+			{
+				"id": "413b1eb8-93b9-4387-aa63-5211c4917861",
+				"method": "POST"
+			},
+			{
+				"id": "391a1511-d10c-4edd-89d8-c8be3b0e97e4",
+				"method": "POST"
+			},
+			{
+				"id": "22015809-2e34-40f5-9b03-7fbd2c34d150",
+				"method": "POST"
+			},
+			{
+				"id": "d3725d98-e69a-4e4b-8a3c-e6e372aa2c4a",
+				"method": "GET"
+			},
+			{
+				"id": "181b3a18-d22e-4b7d-b014-54296cd74d60",
+				"method": "POST"
+			},
+			{
+				"id": "baa39fd6-17df-4862-82ad-47304b4456c1",
+				"method": "GET"
+			},
+			{
+				"id": "0b0a06cf-739c-42c4-9752-b2486cee2e22",
+				"method": "PUT"
+			},
+			{
+				"id": "6a5f3b9e-628d-42aa-97f1-ba7f2f95b7ff",
+				"method": "GET"
+			},
+			{
+				"id": "2b707748-e802-4cd5-a42d-46b5075e49e6",
+				"method": "POST"
+			},
+			{
+				"id": "953ce402-e45b-497c-b59b-6c41b1e55555",
+				"method": "GET"
+			},
+			{
+				"id": "3db58f95-e82c-4810-998e-25c7a2fb4ff3",
+				"method": "PUT"
+			},
+			{
+				"id": "fcc52f6f-c937-4525-ac0d-71150293b528",
+				"method": "GET"
+			},
+			{
+				"id": "39d2d5ba-3c74-4875-809e-217627cec1cc",
+				"method": "POST"
+			},
+			{
+				"id": "011f941e-9847-4a61-be85-1cad5a3defd0",
+				"method": "GET"
+			},
+			{
+				"id": "ec0d1e1f-d665-436a-9cf1-b4ba1bf616c8",
+				"method": "PUT"
+			},
+			{
+				"id": "33320a75-325f-454f-8d09-55cae4604907",
+				"method": "GET"
+			},
+			{
+				"id": "8d3420a7-364f-4a75-a9e2-1a3b554bdc6f",
+				"method": "POST"
+			},
+			{
+				"id": "37262ded-232f-4337-98aa-e5489aa0bd14",
+				"method": "GET"
+			},
+			{
+				"id": "d72c7476-c725-4205-b4c0-e90f9c1f9238",
+				"method": "PUT"
+			},
+			{
+				"id": "3eefb095-afb6-43bd-b40b-dcc59f4b0522",
+				"method": "GET"
+			},
+			{
+				"id": "3fe16683-8fec-40c3-8d36-a8c87b995691",
+				"method": "GET"
+			},
+			{
+				"id": "82a3efb6-b1b3-4cbb-b545-5633aed82383",
+				"method": "PUT"
+			},
+			{
+				"id": "73e07181-eec3-4d94-830a-4947c897cd97",
+				"method": "PUT"
+			},
+			{
+				"id": "3dce227c-814f-4f45-bfcf-dc1fe762bce5",
+				"method": "DELETE"
+			},
+			{
+				"id": "0a7fcd13-545c-4dd3-bf0b-442fea269ed7",
+				"method": "DELETE"
+			},
+			{
+				"id": "a1feee7a-abfb-46f1-a43a-5ffe3b60023a",
+				"method": "DELETE"
+			},
+			{
+				"id": "ecde6a55-0a93-40ae-a3f0-03a3aba08a43",
+				"method": "DELETE"
+			},
+			{
+				"id": "71227664-142c-4c27-a60d-c5aa4668563f",
+				"method": "DELETE"
+			}
+		]
+	}
+}
