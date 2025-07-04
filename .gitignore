@@ -1,0 +1,93 @@
+# Robot Framework - Arquivos de relatórios e logs
+*.html
+*.xml
+*.log
+
+# Diretórios de resultados e relatórios
+results/
+reports/
+output/
+
+# Arquivos temporários do Robot Framework
+*.tmp
+*.temp
+
+# Cache e arquivos de sessão
+.cache/
+*.cache
+
+# Arquivos de configuração local
+.env
+.env.local
+.env.*.local
+
+# Arquivos de IDE e editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Arquivos de backup
+*.bak
+*.backup
+*.old
+
+# Arquivos de dependências Python (se houver)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Ambientes virtuais
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Arquivos de teste específicos que podem ser gerados
+test-results/
+test-output/
+screenshots/
+downloads/
+
+# Arquivos de configuração de CI/CD que podem conter secrets
+.github/workflows/*.yml.bak
+.github/workflows/*.yaml.bak
+
+# Arquivos de dados temporários
+*.csv.tmp
+*.json.tmp
+*.xlsx.tmp
+
+# Arquivos de mídia temporários (se houver)
+*.mp4
+*.avi
+*.png.tmp
+*.jpg.tmp
+
+# Arquivos de configuração local do Robot Framework
+robot.yaml.local
+robot.cfg.local 

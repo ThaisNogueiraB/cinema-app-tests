@@ -32,19 +32,41 @@ Setup Test Environment
 Teardown Test Environment
     [Documentation]    Limpeza após cada teste
     
-    # Screenshot sempre (sucesso ou falha)
-    Take Screenshot    filename=test-{index}
+    # Screenshot sempre (sucesso ou falha) - com tratamento de erro
+    TRY
+        Take Screenshot    filename=test-{index}
+    EXCEPT    AS    ${error}
+        Log    Não foi possível capturar screenshot: ${error}    level=WARN
+    END
     
     # Limpeza de dados de teste
-    Excluir usuário - API
+    TRY
+        Excluir usuário - API
+    EXCEPT    AS    ${error}
+        Log    Erro ao excluir usuário: ${error}    level=WARN
+    END
     
     # Limpeza de filmes criados durante o teste
-    Limpar Filmes de Teste
+    TRY
+        Limpar Filmes de Teste
+    EXCEPT    AS    ${error}
+        Log    Erro ao limpar filmes: ${error}    level=WARN
+    END
     
     # Excluir usuário admin criado para os testes
-    Excluir usuário - API    ${EMAIL_ADMIN}
+    TRY
+        Excluir usuário - API    ${EMAIL_ADMIN}
+    EXCEPT    AS    ${error}
+        Log    Erro ao excluir usuário admin: ${error}    level=WARN
+    END
     
-    Close Browser
+    # Fechar browser com tratamento de erro
+    TRY
+        Close Browser
+    EXCEPT    AS    ${error}
+        Log    Erro ao fechar browser: ${error}    level=WARN
+    END
+    
     Delete All Sessions
 
 Limpar Filmes de Teste
@@ -99,7 +121,12 @@ Wait For Page Load
 
 Take Screenshot On Failure
     [Documentation]    Captura screenshot em caso de falha
-    Run Keyword If Test Failed    Take Screenshot    filename=failure_{index}
+    Run Keyword If Test Failed    
+    ...    TRY
+    ...        Take Screenshot    filename=failure_{index}
+    ...    EXCEPT    AS    ${error}
+    ...        Log    Não foi possível capturar screenshot de falha: ${error}    level=WARN
+    ...    END
 
 Validate Response Status
     [Arguments]    ${response}    ${expected_status}=200
