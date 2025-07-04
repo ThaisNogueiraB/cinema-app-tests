@@ -27,7 +27,7 @@ jobs:
     steps:
     - name: 🔎 Validate required environment variables
       run: |
-        echo "Validando variáveis de ambiente necessárias..."
+        echo "Validando variáveis de ambiente necessárias.."
         REQUIRED_VARS=(
           BACK_REPO_URL
           FRONT_REPO_URL
