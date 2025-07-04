@@ -1,0 +1,164 @@
+name: ROBOT_TESTS_CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  robot-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      mongo:
+        image: mongo
+        ports:
+          - 27017:27017
+        options: --health-cmd="mongosh --eval 'db.runCommand({ ping:1 })'" --health-interval=10s --health-timeout=5s --health-retries=5
+
+    env:
+      BACK_REPO_URL: https://github.com/juniorschmitz/cinema-challenge-back
+      FRONT_REPO_URL: https://github.com/juniorschmitz/cinema-challenge-front
+      MONGODB_URI: mongodb://localhost:27017/cinema-app
+      BACKEND_PORT: 3000
+      FRONTEND_PORT: 3002
+
+    steps:
+    - name: 🔎 Validate required environment variables
+      run: |
+        echo "Validando variáveis de ambiente necessárias..."
+        REQUIRED_VARS=(
+          BACK_REPO_URL
+          FRONT_REPO_URL
+          MONGODB_URI
+          BACKEND_PORT
+          FRONTEND_PORT
+        )
+        MISSING=0
+        for VAR in "${REQUIRED_VARS[@]}"; do
+          if [ -z "${!VAR}" ]; then
+            echo "❌ Variável obrigatória não definida: $VAR"
+            MISSING=1
+          else
+            echo "✅ $VAR = ${!VAR}"
+          fi
+        done
+        # Validar secret do Gemini para as próximas pipelines
+        if [ -z "${{ secrets.GEMINI_API_KEY }}" ]; then
+          echo "⚠️ Atenção: O secret GEMINI_API_KEY não está configurado. A análise de criticidade não funcionará."
+        else
+          echo "✅ Secret GEMINI_API_KEY está configurado."
+        fi
+        if [ $MISSING -eq 1 ]; then
+          echo "❌ Corrija as variáveis de ambiente antes de continuar."
+          exit 1
+        fi
+
+    - name: Checkout test repository
+      uses: actions/checkout@v4
+
+    - name: Clone Backend repository
+      run: git clone $BACK_REPO_URL cinema-challenge-back
+
+    - name: Install Backend dependencies
+      run: |
+        cd cinema-challenge-back
+        npm ci
+
+    - name: Create .env file for Backend
+      run: |
+        cd cinema-challenge-back
+        echo "MONGODB_URI=${MONGODB_URI}" >> .env
+        echo "PORT=${BACKEND_PORT}" >> .env
+        echo "JWT_SECRET=secret_key" >> .env
+
+    - name: Start Backend and capture log
+      run: |
+        cd cinema-challenge-back
+        npm start > backend.log 2>&1 &
+
+    - name: Wait for Backend to be ready
+      run: |
+        for i in {1..30}; do
+          if curl -s http://localhost:${BACKEND_PORT}/api/v1/status >/dev/null; then
+            echo "Backend is up!"
+            exit 0
+          fi
+          echo "Waiting for backend..."
+          sleep 2
+          cat cinema-challenge-back/backend.log || true
+        done
+        echo "Backend did not respond in time."
+        exit 1
+
+    - name: Clone Frontend repository
+      run: git clone $FRONT_REPO_URL cinema-challenge-front
+
+    - name: Install Frontend dependencies
+      run: |
+        cd cinema-challenge-front
+        npm ci
+
+    - name: Create .env.local file for Frontend
+      run: |
+        cd cinema-challenge-front
+        echo "VITE_API_URL=/api/v1" >> .env.local
+        echo "VITE_APP_ENV=development" >> .env.local
+        echo "VITE_ENABLE_MOCK_API=false" >> .env.local
+        echo "VITE_ENABLE_ANALYTICS=false" >> .env.local
+
+    - name: Start Frontend and capture log
+      run: |
+        cd cinema-challenge-front
+        npm run dev -- --host 0.0.0.0 --port ${FRONTEND_PORT} > frontend.log 2>&1 &
+
+    - name: Wait for Frontend to be ready
+      run: |
+        for i in {1..30}; do
+          if curl -s http://localhost:${FRONTEND_PORT} >/dev/null; then
+            echo "Frontend is up!"
+            exit 0
+          fi
+          echo "Waiting for frontend..."
+          sleep 2
+          cat cinema-challenge-front/frontend.log || true
+        done
+        echo "Frontend did not respond in time."
+        exit 1
+
+    - name: Set up Python and Robot Framework
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Cache pip dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: Install Robot Framework dependencies
+      run: |
+        pip install -r requirements.txt
+        rfbrowser init
+
+    - name: Install xvfb
+      run: sudo apt-get update && sudo apt-get install -y xvfb
+
+    - name: Make script executable
+      run: chmod +x run_tests_ci.sh
+
+    - name: Run Robot Framework tests with xvfb and screenshots
+      run: |
+        mkdir -p results
+        xvfb-run --auto-servernum ./run_tests_ci.sh
+
+    - name: Upload Robot Test Reports and Screenshots
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: robot-test-reports
+        path: results
