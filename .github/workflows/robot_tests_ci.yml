@@ -6,9 +6,18 @@ on:
   pull_request:
     branches: [ main, develop ]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   robot-tests:
     runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     services:
       mongo:
@@ -162,3 +171,651 @@ jobs:
       with:
         name: robot-test-reports
         path: results
+
+    # Steps de Deploy e Análise de Criticidade
+    - name: ⚙️ Configure Pages
+      if: always()
+      uses: actions/configure-pages@v5
+
+    - name: 🏠 Create index.html for navigation
+      if: always()
+      run: |
+        echo "📄 Criando index.html para navegação..."
+        cat > results/index.html << 'EOF'
+        <!DOCTYPE html>
+        <html lang="pt-BR">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Relatórios de Testes Robot Framework</title>
+            <style>
+                body { 
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+                    margin: 0; 
+                    padding: 20px; 
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    min-height: 100vh;
+                }
+                .container { 
+                    max-width: 900px; 
+                    margin: 0 auto; 
+                    background: white; 
+                    padding: 40px; 
+                    border-radius: 15px; 
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                }
+                h1 { 
+                    color: #333; 
+                    text-align: center; 
+                    margin-bottom: 30px; 
+                    font-size: 2.5em;
+                    background: linear-gradient(45deg, #667eea, #764ba2);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                }
+                .status-badge {
+                    display: inline-block;
+                    padding: 8px 16px;
+                    border-radius: 20px;
+                    font-size: 14px;
+                    font-weight: bold;
+                    margin-bottom: 20px;
+                }
+                .success { background: #d4edda; color: #155724; border: 2px solid #c3e6cb; }
+                .warning { background: #fff3cd; color: #856404; border: 2px solid #ffeaa7; }
+                .file-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                    gap: 20px;
+                    margin: 30px 0;
+                }
+                .file-card {
+                    background: #f8f9fa;
+                    border: 2px solid #e9ecef;
+                    border-radius: 10px;
+                    padding: 20px;
+                    transition: all 0.3s ease;
+                    text-decoration: none;
+                    color: inherit;
+                    display: block;
+                }
+                .file-card:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+                    border-color: #667eea;
+                }
+                .file-card h3 {
+                    margin: 0 0 10px 0;
+                    color: #333;
+                    font-size: 1.2em;
+                }
+                .file-card p {
+                    margin: 0;
+                    color: #666;
+                    font-size: 0.9em;
+                }
+                .file-icon {
+                    font-size: 2em;
+                    margin-bottom: 10px;
+                    display: block;
+                }
+                .screenshots-section {
+                    background: #fff;
+                    border: 2px solid #e9ecef;
+                    border-radius: 10px;
+                    padding: 20px;
+                    margin: 20px 0;
+                }
+                .screenshots-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                    gap: 15px;
+                    margin-top: 15px;
+                }
+                .screenshot-item {
+                    text-align: center;
+                    padding: 10px;
+                    border: 1px solid #ddd;
+                    border-radius: 8px;
+                    background: #f8f9fa;
+                    transition: all 0.3s ease;
+                }
+                .screenshot-item:hover {
+                    transform: scale(1.05);
+                    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                }
+                .screenshot-item img {
+                    width: 100%;
+                    height: 100px;
+                    object-fit: cover;
+                    border-radius: 5px;
+                    margin-bottom: 8px;
+                }
+                .footer {
+                    text-align: center;
+                    margin-top: 30px;
+                    padding-top: 20px;
+                    border-top: 1px solid #e9ecef;
+                    color: #666;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>🤖 Relatórios de Testes Robot Framework</h1>
+                
+                <div style="text-align: center;">
+                    <span class="status-badge success">✅ Relatórios Disponíveis</span>
+                </div>
+                
+                <div class="file-grid">
+                    <a href="report.html" class="file-card">
+                        <span class="file-icon">📊</span>
+                        <h3>Relatório Principal</h3>
+                        <p>Relatório detalhado com resultados dos testes executados</p>
+                    </a>
+                    
+                    <a href="log.html" class="file-card">
+                        <span class="file-icon">📝</span>
+                        <h3>Log Detalhado</h3>
+                        <p>Log completo com todos os detalhes da execução dos testes</p>
+                    </a>
+                    
+                    <a href="output.xml" class="file-card">
+                        <span class="file-icon">📄</span>
+                        <h3>XML de Saída</h3>
+                        <p>Dados brutos em formato XML para análise técnica</p>
+                    </a>
+                    
+                    <a href="browser/screenshot/" class="file-card">
+                        <span class="file-icon">📸</span>
+                        <h3>Screenshots</h3>
+                        <p>Capturas de tela durante a execução dos testes de frontend</p>
+                    </a>
+                    
+                    <a href="criticality_analysis.html" class="file-card">
+                        <span class="file-icon">🔍</span>
+                        <h3>Análise de Criticidade</h3>
+                        <p>Análise inteligente das falhas dos testes com Gemini AI</p>
+                    </a>
+                </div>
+                
+                <div class="screenshots-section">
+                    <h3>📸 Screenshots Disponíveis</h3>
+                    <div class="screenshots-grid" id="screenshots-grid">
+                        <!-- Screenshots serão carregados dinamicamente -->
+                    </div>
+                </div>
+                
+                <div class="footer">
+                    <p>📅 Gerado automaticamente pelo Robot Framework</p>
+                    <p>🔄 Atualizado a cada execução dos testes</p>
+                </div>
+            </div>
+            
+            <script>
+                // Função para carregar screenshots dinamicamente
+                function loadScreenshots() {
+                    const grid = document.getElementById('screenshots-grid');
+                    const commonScreenshots = [
+                        'test-1.png', 'test-2.png', 'test-3.png', 'test-4.png',
+                        'test-5.png', 'test-6.png', 'test-7.png', 'test-8.png',
+                        'test-9.png', 'test-10.png', 'test-11.png', 'test-12.png',
+                        'CTW-015-sucesso-1.png', 'failure_1.png'
+                    ];
+                    
+                    commonScreenshots.forEach((filename, index) => {
+                        const item = document.createElement('div');
+                        item.className = 'screenshot-item';
+                        item.innerHTML = `
+                            <img src="browser/screenshot/${filename}" 
+                                 alt="Screenshot ${index + 1}" 
+                                 onerror="this.parentElement.style.display='none'"
+                                 onclick="window.open(this.src, '_blank')">
+                            <div>${filename.replace('.png', '')}</div>
+                        `;
+                        grid.appendChild(item);
+                    });
+                }
+                
+                // Carregar screenshots quando a página carregar
+                window.onload = loadScreenshots;
+            </script>
+        </body>
+        </html>
+        EOF
+
+    - name: 📋 List files for debugging
+      if: always()
+      run: |
+        echo "📁 Arquivos disponíveis:"
+        ls -la results/ || echo "Diretório results não existe"
+        
+        echo ""
+        echo "📊 Screenshots encontrados:"
+        find results/ -name "*.png" -o -name "*.jpg" | head -5 || echo "Nenhum screenshot encontrado"
+
+    - name: 📊 Extract test results for analysis
+      if: always()
+      run: |
+        echo "📊 Extraindo resultados dos testes para análise..."
+        
+        if [ ! -f results/report.html ]; then
+          echo "❌ Arquivo report.html não encontrado!"
+          exit 1
+        fi
+        
+        echo "📄 Estrutura do report.html:"
+        echo "Tamanho do arquivo: $(wc -l < results/report.html) linhas"
+        echo "Primeiras 10 linhas:"
+        head -10 results/report.html
+        echo ""
+        echo "Buscando por padrões de estatísticas..."
+        grep -i "total\|pass\|fail\|skip\|statistics" results/report.html | head -5
+        
+        # Extrair estatísticas dos testes com múltiplas estratégias
+        echo "🔍 Analisando estrutura do report.html..."
+        
+        # Estratégia 1: Buscar por padrões comuns no Robot Framework
+        TOTAL_TESTS=$(grep -oP 'Total:\s*\K[0-9]+' results/report.html | head -1)
+        PASSED_TESTS=$(grep -oP 'Pass:\s*\K[0-9]+' results/report.html | head -1)
+        FAILED_TESTS=$(grep -oP 'Fail:\s*\K[0-9]+' results/report.html | head -1)
+        SKIPPED_TESTS=$(grep -oP 'Skip:\s*\K[0-9]+' results/report.html | head -1)
+        
+        # Estratégia 2: Se não encontrou, buscar por outras variações
+        if [ -z "$TOTAL_TESTS" ]; then
+          TOTAL_TESTS=$(grep -oP 'tests="\K[0-9]+' results/report.html | head -1)
+        fi
+        if [ -z "$PASSED_TESTS" ]; then
+          PASSED_TESTS=$(grep -oP 'pass="\K[0-9]+' results/report.html | head -1)
+        fi
+        if [ -z "$FAILED_TESTS" ]; then
+          FAILED_TESTS=$(grep -oP 'fail="\K[0-9]+' results/report.html | head -1)
+        fi
+        if [ -z "$SKIPPED_TESTS" ]; then
+          SKIPPED_TESTS=$(grep -oP 'skip="\K[0-9]+' results/report.html | head -1)
+        fi
+        
+        # Estratégia 3: Buscar por tabelas de estatísticas
+        if [ -z "$TOTAL_TESTS" ]; then
+          TOTAL_TESTS=$(grep -A 10 -B 5 'Statistics' results/report.html | grep -oP '[0-9]+' | head -1)
+        fi
+        
+        # Estratégia 4: Contar manualmente se necessário
+        if [ -z "$TOTAL_TESTS" ]; then
+          echo "📊 Contando testes manualmente..."
+          TOTAL_TESTS=$(grep -c 'class="pass\|class="fail\|class="skip"' results/report.html || echo "0")
+        fi
+        if [ -z "$PASSED_TESTS" ]; then
+          PASSED_TESTS=$(grep -c 'class="pass"' results/report.html || echo "0")
+        fi
+        if [ -z "$FAILED_TESTS" ]; then
+          FAILED_TESTS=$(grep -c 'class="fail"' results/report.html || echo "0")
+        fi
+        if [ -z "$SKIPPED_TESTS" ]; then
+          SKIPPED_TESTS=$(grep -c 'class="skip"' results/report.html || echo "0")
+        fi
+        
+        # Valores padrão se não encontrados
+        TOTAL_TESTS=${TOTAL_TESTS:-0}
+        PASSED_TESTS=${PASSED_TESTS:-0}
+        FAILED_TESTS=${FAILED_TESTS:-0}
+        SKIPPED_TESTS=${SKIPPED_TESTS:-0}
+        
+        echo "📈 Estatísticas dos Testes:"
+        echo "   Total: $TOTAL_TESTS"
+        echo "   Passou: $PASSED_TESTS"
+        echo "   Falhou: $FAILED_TESTS"
+        echo "   Pulou: $SKIPPED_TESTS"
+        
+        # Salvar estatísticas para uso posterior
+        echo "TOTAL_TESTS=$TOTAL_TESTS" >> $GITHUB_ENV
+        echo "PASSED_TESTS=$PASSED_TESTS" >> $GITHUB_ENV
+        echo "FAILED_TESTS=$FAILED_TESTS" >> $GITHUB_ENV
+        echo "SKIPPED_TESTS=$SKIPPED_TESTS" >> $GITHUB_ENV
+        
+        # Extrair detalhes dos testes que falharam
+        if [ "$FAILED_TESTS" -gt 0 ]; then
+          echo "🔍 Extraindo detalhes dos testes falhados..."
+          cat > test_failures.txt << 'FAILURES_EOF'
+          DETALHES DOS TESTES FALHADOS:
+          =============================
+          
+          FAILURES_EOF
+          grep -A 5 -B 5 'class="fail"' results/report.html | grep -E '<td|<tr' | head -20 >> test_failures.txt
+          echo "" >> test_failures.txt
+          echo "MENSAGENS DE ERRO:" >> test_failures.txt
+          echo "==================" >> test_failures.txt
+          grep -A 10 'class="fail"' results/report.html | grep -E '<td|</td>' | head -30 >> test_failures.txt
+        fi
+
+    - name: 🤖 Analyze test failures with Gemini AI
+      if: always() && env.FAILED_TESTS != '0' && env.FAILED_TESTS != '' && env.FAILED_TESTS != null
+      env:
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      run: |
+        echo "🤖 Analisando falhas com Gemini AI..."
+        
+        if [ -z "$GEMINI_API_KEY" ]; then
+          echo "❌ GEMINI_API_KEY não configurada!"
+          exit 1
+        fi
+        
+        # Preparar prompt para análise de criticidade
+        cat > analysis_prompt.txt << EOF
+        CONTEXTO: Análise de Criticidade de Testes Robot Framework
+        
+        ESTATÍSTICAS DOS TESTES:
+        - Total de testes: $TOTAL_TESTS
+        - Testes que passaram: $PASSED_TESTS
+        - Testes que falharam: $FAILED_TESTS
+        - Testes pulados: $SKIPPED_TESTS
+        
+        DETALHES DOS TESTES FALHADOS:
+        $(cat test_failures.txt)
+        
+        TAREFA: Analise os testes que falharam e forneça:
+        
+        1. CLASSIFICAÇÃO DE CRITICIDADE:
+           - ALTA: Falhas que podem causar problemas críticos em produção
+           - MÉDIA: Falhas que afetam funcionalidades importantes
+           - BAIXA: Falhas menores ou cosméticas
+        
+        2. ANÁLISE DETALHADA:
+           - Identifique padrões nas falhas
+           - Sugira possíveis causas raiz
+           - Indique impacto no sistema
+        
+        3. RECOMENDAÇÕES:
+           - Priorização para correção
+           - Sugestões de melhorias nos testes
+           - Ações imediatas recomendadas
+        
+        4. RESUMO EXECUTIVO:
+           - Pontuação geral de saúde dos testes (0-100)
+           - Status geral do sistema
+           - Próximos passos recomendados
+        
+        Responda em português brasileiro, seja conciso mas detalhado.
+        EOF
+        
+        # Enviar para Gemini AI
+        echo "📤 Enviando dados para análise..."
+        
+        PROMPT=$(cat analysis_prompt.txt | tr -d '\n' | sed 's/"/\\"/g')
+        
+        RESPONSE=$(curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent" \
+        -H "Content-Type: application/json" \
+        -H "X-goog-api-key: $GEMINI_API_KEY" \
+        -X POST \
+        -d "{
+              \"contents\": [
+                {
+                  \"parts\": [
+                    {\"text\": \"$PROMPT\"}
+                  ]
+                }
+              ]
+            }")
+        
+        # Extrair resposta
+        ANALYSIS=$(echo "$RESPONSE" | jq -r '.candidates[0].content.parts[0].text // "Erro ao obter análise do Gemini"')
+        
+        echo "📋 Análise do Gemini AI:"
+        echo "$ANALYSIS"
+        
+        # Salvar análise em arquivo
+        echo "$ANALYSIS" > gemini_analysis.txt
+
+    - name: 📊 Create criticality analysis report
+      if: always()
+      run: |
+        echo "📊 Criando relatório de análise de criticidade..."
+        
+        # Calcular métricas
+        if [ "$TOTAL_TESTS" -gt 0 ]; then
+          SUCCESS_RATE=$((PASSED_TESTS * 100 / TOTAL_TESTS))
+        else
+          SUCCESS_RATE=0
+        fi
+        
+        # Determinar status geral
+        if [ "$SUCCESS_RATE" -ge 90 ]; then
+          STATUS="🟢 EXCELENTE"
+          STATUS_COLOR="#28a745"
+        elif [ "$SUCCESS_RATE" -ge 75 ]; then
+          STATUS="🟡 BOM"
+          STATUS_COLOR="#ffc107"
+        elif [ "$SUCCESS_RATE" -ge 50 ]; then
+          STATUS="🟠 ATENÇÃO"
+          STATUS_COLOR="#fd7e14"
+        else
+          STATUS="🔴 CRÍTICO"
+          STATUS_COLOR="#dc3545"
+        fi
+        
+        # Criar relatório HTML
+        cat > results/criticality_analysis.html << EOF
+        <!DOCTYPE html>
+        <html lang="pt-BR">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Análise de Criticidade - Testes Robot Framework</title>
+            <style>
+                body { 
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+                    margin: 0; 
+                    padding: 20px; 
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    min-height: 100vh;
+                }
+                .container { 
+                    max-width: 1000px; 
+                    margin: 0 auto; 
+                    background: white; 
+                    padding: 40px; 
+                    border-radius: 15px; 
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                }
+                h1 { 
+                    color: #333; 
+                    text-align: center; 
+                    margin-bottom: 30px; 
+                    font-size: 2.5em;
+                    background: linear-gradient(45deg, #667eea, #764ba2);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                }
+                .metrics-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                    gap: 20px;
+                    margin: 30px 0;
+                }
+                .metric-card {
+                    background: #f8f9fa;
+                    border: 2px solid #e9ecef;
+                    border-radius: 10px;
+                    padding: 20px;
+                    text-align: center;
+                }
+                .metric-value {
+                    font-size: 2em;
+                    font-weight: bold;
+                    margin-bottom: 10px;
+                }
+                .metric-label {
+                    color: #666;
+                    font-size: 0.9em;
+                }
+                .status-badge {
+                    display: inline-block;
+                    padding: 10px 20px;
+                    border-radius: 25px;
+                    font-size: 1.2em;
+                    font-weight: bold;
+                    margin: 20px 0;
+                }
+                .analysis-section {
+                    background: #f8f9fa;
+                    border: 2px solid #e9ecef;
+                    border-radius: 10px;
+                    padding: 25px;
+                    margin: 20px 0;
+                }
+                .analysis-section h3 {
+                    color: #333;
+                    margin-top: 0;
+                    border-bottom: 2px solid #667eea;
+                    padding-bottom: 10px;
+                }
+                .analysis-content {
+                    background: white;
+                    padding: 20px;
+                    border-radius: 8px;
+                    border-left: 4px solid #667eea;
+                    white-space: pre-wrap;
+                    font-family: 'Courier New', monospace;
+                    font-size: 0.9em;
+                    line-height: 1.6;
+                    max-height: 500px;
+                    overflow-y: auto;
+                }
+                .footer {
+                    text-align: center;
+                    margin-top: 30px;
+                    padding-top: 20px;
+                    border-top: 1px solid #e9ecef;
+                    color: #666;
+                }
+                .success-rate {
+                    font-size: 3em;
+                    font-weight: bold;
+                    margin: 20px 0;
+                    text-align: center;
+                }
+                .back-link {
+                    text-align: center;
+                    margin: 20px 0;
+                }
+                .back-link a {
+                    color: #007bff;
+                    text-decoration: none;
+                    font-weight: bold;
+                    padding: 10px 20px;
+                    border: 2px solid #007bff;
+                    border-radius: 5px;
+                    transition: all 0.3s ease;
+                }
+                .back-link a:hover {
+                    background: #007bff;
+                    color: white;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>🔍 Análise de Criticidade dos Testes</h1>
+                
+                <div class="back-link">
+                    <a href="index.html">← Voltar ao Relatório Principal</a>
+                </div>
+                
+                <div style="text-align: center;">
+                    <div class="success-rate" style="color: $STATUS_COLOR;">$SUCCESS_RATE%</div>
+                    <div class="status-badge" style="background: $STATUS_COLOR; color: white;">$STATUS</div>
+                </div>
+                
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">$TOTAL_TESTS</div>
+                        <div class="metric-label">Total de Testes</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" style="color: #28a745;">$PASSED_TESTS</div>
+                        <div class="metric-label">Testes Passaram</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" style="color: #dc3545;">$FAILED_TESTS</div>
+                        <div class="metric-label">Testes Falharam</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" style="color: #ffc107;">$SKIPPED_TESTS</div>
+                        <div class="metric-label">Testes Pulados</div>
+                    </div>
+                </div>
+                
+                <div class="analysis-section">
+                    <h3>🤖 Análise de Criticidade - Gemini AI</h3>
+                    <div class="analysis-content">
+        EOF
+        
+        if [ -f gemini_analysis.txt ]; then
+          cat gemini_analysis.txt >> results/criticality_analysis.html
+        else
+          echo "Nenhuma análise disponível. Todos os testes passaram ou não há falhas para analisar." >> results/criticality_analysis.html
+        fi
+        
+        cat >> results/criticality_analysis.html << EOF
+                    </div>
+                </div>
+                
+                <div class="analysis-section">
+                    <h3>📊 Detalhes dos Testes Falhados</h3>
+                    <div class="analysis-content">
+        EOF
+        
+        if [ -f test_failures.txt ]; then
+          cat test_failures.txt >> results/criticality_analysis.html
+        else
+          echo "Nenhum teste falhou nesta execução." >> results/criticality_analysis.html
+        fi
+        
+        cat >> results/criticality_analysis.html << EOF
+                    </div>
+                </div>
+                
+                <div class="footer">
+                    <p>📅 Análise gerada automaticamente em $(date)</p>
+                    <p>🔄 Atualizada a cada execução dos testes</p>
+                    <p>🤖 Análise de criticidade por Gemini AI</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        EOF
+        
+        echo "📄 Relatório de análise criado: results/criticality_analysis.html"
+
+    - name: 📦 Upload to GitHub Pages
+      if: always()
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: ./results
+
+    - name: 📢 Deploy to GitHub Pages
+      if: always()
+      id: deployment
+      uses: actions/deploy-pages@v4
+
+    - name: 📋 Analysis Summary
+      if: always()
+      run: |
+        echo "📊 RESUMO DA ANÁLISE:"
+        echo "===================="
+        echo "📈 Taxa de Sucesso: $SUCCESS_RATE%"
+        echo "📊 Total de Testes: $TOTAL_TESTS"
+        echo "✅ Testes Passaram: $PASSED_TESTS"
+        echo "❌ Testes Falharam: $FAILED_TESTS"
+        echo "⏭️ Testes Pulados: $SKIPPED_TESTS"
+        echo ""
+        if [ -f gemini_analysis.txt ]; then
+          echo "🤖 Análise do Gemini AI disponível em:"
+          echo "   - criticality_analysis.html (relatório completo)"
+          echo "   - gemini_analysis.txt (análise em texto)"
+        else
+          echo "✅ Todos os testes passaram - nenhuma análise necessária"
+        fi
