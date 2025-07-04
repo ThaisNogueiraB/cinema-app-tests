@@ -396,10 +396,8 @@ ls -la results/
 3. Incluir logs e screenshots
 4. Descrever passos para reprodução
 
-## 📄 Licença
-
-Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
 
 
-**Desenvolvido com ❤️ pela QA Thais Nogueira**  
+
+**Desenvolvido com ❤️ pela QA [Thais Nogueira](https://github.com/ThaisNogueiraB)**  
 *Última atualização: Julho 2025*
